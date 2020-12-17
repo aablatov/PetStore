@@ -1,0 +1,1084 @@
+{
+	"info": {
+		"_postman_id": "eba4ce28-4824-4552-aadb-d3120d5cdc24",
+		"name": "newman",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Suite_one(files_CSV)",
+			"item": [
+				{
+					"name": "Test_1_Add a new pet",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f25165fe-431f-461b-9c49-699aa97c0fb0",
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 202]);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 1000ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									"\r",
+									"var jsonData = pm.response.json();\r",
+									"var petId = +pm.iterationData.get(\"petID\");\r",
+									"//var petName = JSON.parse(pm.environment.get(\"petName\"));\r",
+									"//var tagsName = JSON.parse(pm.environment.get(\"tagsName\"));\r",
+									"//var petStatus = JSON.parse(pm.environment.get(\"petStatus\"));\r",
+									"var petName = pm.iterationData.get(\"petName\");\r",
+									"var tagsName = pm.iterationData.get(\"tagsName\");\r",
+									"var petStatus = pm.iterationData.get(\"petStatus\");\r",
+									"\r",
+									"console.log(petName);\r",
+									"pm.test(\"Your pet ID = \" + petId, function () {\r",
+									"    \r",
+									"    pm.expect(jsonData.id).to.eql(petId);\r",
+									"});\r",
+									"pm.test(\"Your pet name \" + petName, function () {\r",
+									"    \r",
+									"    pm.expect(jsonData.name).to.eql(petName);\r",
+									"});\r",
+									"pm.test(\"Your tags name \"+ tagsName, function () {\r",
+									"    \r",
+									"    pm.expect(jsonData.tags[0].name).to.eql(tagsName);\r",
+									"});\r",
+									"pm.test(\"Your status \"+ petStatus, function () {\r",
+									"    \r",
+									"    pm.expect(jsonData.status).to.eql(petStatus);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "challengeAlgorithm",
+									"value": "S256",
+									"type": "string"
+								},
+								{
+									"key": "grant_type",
+									"value": "password_credentials",
+									"type": "string"
+								},
+								{
+									"key": "clientId",
+									"value": "test",
+									"type": "string"
+								},
+								{
+									"key": "authUrl",
+									"value": "https://petstore.swagger.io/oauth/authorize",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "queryParams",
+									"type": "string"
+								},
+								{
+									"key": "client_authentication",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": {{petID}},\n  \"category\": {\n    \"id\": 5,\n    \"name\": \"{{category_Name}}\"\n  },\n  \"name\": \"{{petName}}\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"tags\": [\n    {\n      \"id\": 5,\n      \"name\": \"{{tagsName}}\"\n    }\n  ],\n  \"status\": \"{{petStatus}}\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/pet",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"pet"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Invalid input",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"description": {
+											"content": "Added as a part of security scheme: oauth2",
+											"type": "text/plain"
+										},
+										"key": "Authorization",
+										"value": "<token>"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/pet",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"pet"
+									]
+								}
+							},
+							"status": "Method Not Allowed",
+							"code": 405,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "text/plain"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Test_2_Finds Pets by tags",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5add847a-30ac-43b6-9397-3a648ee1417b",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 1000ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									"\r",
+									"var jsonData = pm.response.json();\r",
+									"var petId = +pm.iterationData.get(\"petID\");\r",
+									"var petName = pm.iterationData.get(\"petName\");\r",
+									"var tagsName = pm.iterationData.get(\"tagsName\");\r",
+									"var petStatus = pm.iterationData.get(\"petStatus\");\r",
+									"\r",
+									"console.log(jsonData);\r",
+									"pm.test(\"Your pet ID = \" + petId, function () {\r",
+									"    \r",
+									"    pm.expect(jsonData[0].id).to.eql(petId);\r",
+									"});\r",
+									"pm.test(\"Your pet name \" + petName, function () {\r",
+									"    \r",
+									"    pm.expect(jsonData[0].name).to.eql(petName);\r",
+									"});\r",
+									"pm.test(\"Your tags name \"+ tagsName, function () {\r",
+									"    \r",
+									"    pm.expect(jsonData[0].tags[0].name).to.eql(tagsName);\r",
+									"});\r",
+									"pm.test(\"Your status \"+ petStatus, function () {\r",
+									"    \r",
+									"    pm.expect(jsonData[0].status).to.eql(petStatus);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "5f1d5960-1dc6-4261-85c0-1178330abf82",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "oauth2"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/pet/findByTags?tags={{tagsName}}&tags={{tagsName}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"pet",
+								"findByTags"
+							],
+							"query": [
+								{
+									"key": "tags",
+									"value": "{{tagsName}}",
+									"description": "(Required) Tags to filter by"
+								},
+								{
+									"key": "tags",
+									"value": "{{tagsName}}",
+									"description": "(Required) Tags to filter by"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Invalid tag value",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": {
+											"content": "Added as a part of security scheme: oauth2",
+											"type": "text/plain"
+										},
+										"key": "Authorization",
+										"value": "<token>"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/pet/findByTags?tags=<string>&tags=<string>",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"pet",
+										"findByTags"
+									],
+									"query": [
+										{
+											"key": "tags",
+											"value": "<string>"
+										},
+										{
+											"key": "tags",
+											"value": "<string>"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "text/plain"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						},
+						{
+							"name": "successful operation",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": {
+											"content": "Added as a part of security scheme: oauth2",
+											"type": "text/plain"
+										},
+										"key": "Authorization",
+										"value": "<token>"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/pet/findByTags?tags=<string>&tags=<string>",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"pet",
+										"findByTags"
+									],
+									"query": [
+										{
+											"key": "tags",
+											"value": "<string>"
+										},
+										{
+											"key": "tags",
+											"value": "<string>"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "[\n {\n  \"name\": \"doggie\",\n  \"photoUrls\": [\n   \"<string>\",\n   \"<string>\"\n  ],\n  \"id\": \"<long>\",\n  \"category\": {\n   \"id\": \"<long>\",\n   \"name\": \"<string>\"\n  },\n  \"tags\": [\n   {\n    \"id\": \"<long>\",\n    \"name\": \"<string>\"\n   },\n   {\n    \"id\": \"<long>\",\n    \"name\": \"<string>\"\n   }\n  ],\n  \"status\": \"<string>\"\n },\n {\n  \"name\": \"doggie\",\n  \"photoUrls\": [\n   \"<string>\",\n   \"<string>\"\n  ],\n  \"id\": \"<long>\",\n  \"category\": {\n   \"id\": \"<long>\",\n   \"name\": \"<string>\"\n  },\n  \"tags\": [\n   {\n    \"id\": \"<long>\",\n    \"name\": \"<string>\"\n   },\n   {\n    \"id\": \"<long>\",\n    \"name\": \"<string>\"\n   }\n  ],\n  \"status\": \"<string>\"\n }\n]"
+						}
+					]
+				},
+				{
+					"name": "Test_3_Update  pet Status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5d0e4b22-adb2-439e-b802-b98d182d8d52",
+								"exec": [
+									"pm.test(\"Successful PUT request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 202]);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 1000ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									"\r",
+									"var jsonData = pm.response.json();\r",
+									"var petId = +pm.iterationData.get(\"petID\");\r",
+									"var petName = pm.iterationData.get(\"petName\");\r",
+									"var tagsName = pm.iterationData.get(\"tagsName\");\r",
+									"var petStatus = pm.iterationData.get(\"tempPetStatus\");\r",
+									"\r",
+									"console.log(petName);\r",
+									"pm.test(\"Your pet ID = \" + petId, function () {\r",
+									"    \r",
+									"    pm.expect(jsonData.id).to.eql(petId);\r",
+									"});\r",
+									"pm.test(\"Your pet name \" + petName, function () {\r",
+									"    \r",
+									"    pm.expect(jsonData.name).to.eql(petName);\r",
+									"});\r",
+									"pm.test(\"Your tags name \"+ tagsName, function () {\r",
+									"    \r",
+									"    pm.expect(jsonData.tags[0].name).to.eql(tagsName);\r",
+									"});\r",
+									"pm.test(\"Your status \"+ petStatus, function () {\r",
+									"    \r",
+									"    pm.expect(jsonData.status).to.eql(petStatus);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "a9b98993-ec54-448d-a91a-beb09df43ea9",
+								"exec": [
+									"//pm.iterationData.set(\"tempPetStatus\",pm.iterationData.get(\"petStatus\"));\r",
+									"//var petStatusPut = \"non_\"+ pm.iterationData.get(\"petStatus\");\r",
+									"//console.log(petStatusPut);\r",
+									"//pm.iterationData.set(\"petStatus\",petStatusPut);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "oauth2"
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": {{petID}},\n  \"category\": {\n    \"id\": 5,\n    \"name\": \"{{category_Name}}\"\n  },\n  \"name\": \"{{petName}}\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"tags\": [\n    {\n      \"id\": 5,\n      \"name\": \"{{tagsName}}\"\n    }\n  ],\n  \"status\": \"{{tempPetStatus}}\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/pet",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"pet"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Invalid ID supplied",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"description": {
+											"content": "Added as a part of security scheme: oauth2",
+											"type": "text/plain"
+										},
+										"key": "Authorization",
+										"value": "<token>"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/pet",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"pet"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "text/plain"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						},
+						{
+							"name": "Pet not found",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"description": {
+											"content": "Added as a part of security scheme: oauth2",
+											"type": "text/plain"
+										},
+										"key": "Authorization",
+										"value": "<token>"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/pet",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"pet"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "text/plain"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						},
+						{
+							"name": "Validation exception",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"description": {
+											"content": "Added as a part of security scheme: oauth2",
+											"type": "text/plain"
+										},
+										"key": "Authorization",
+										"value": "<token>"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/pet",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"pet"
+									]
+								}
+							},
+							"status": "Method Not Allowed",
+							"code": 405,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "text/plain"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Test_4_Finds Pets by status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b826f4c4-e71c-4535-a77d-fb4f996d5144",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 1000ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									"\r",
+									"var jsonData = pm.response.json();\r",
+									"var petId = +pm.iterationData.get(\"petID\");\r",
+									"var petName = pm.iterationData.get(\"petName\");\r",
+									"var tagsName = pm.iterationData.get(\"tagsName\");\r",
+									"var petStatus = pm.iterationData.get(\"tempPetStatus\");\r",
+									"\r",
+									"console.log(jsonData);\r",
+									"pm.test(\"Your pet ID = \" + petId, function () {\r",
+									"    \r",
+									"    pm.expect(jsonData[0].id).to.eql(petId);\r",
+									"});\r",
+									"pm.test(\"Your pet name \" + petName, function () {\r",
+									"    \r",
+									"    pm.expect(jsonData[0].name).to.eql(petName);\r",
+									"});\r",
+									"pm.test(\"Your tags name \"+ tagsName, function () {\r",
+									"    \r",
+									"    pm.expect(jsonData[0].tags[0].name).to.eql(tagsName);\r",
+									"});\r",
+									"pm.test(\"Your status \"+ petStatus, function () {\r",
+									"    \r",
+									"    pm.expect(jsonData[0].status).to.eql(petStatus);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "oauth2"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/pet/findByStatus?status={{tempPetStatus}}&status={{tempPetStatus}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"pet",
+								"findByStatus"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "{{tempPetStatus}}",
+									"description": "(Required) Status values that need to be considered for filter"
+								},
+								{
+									"key": "status",
+									"value": "{{tempPetStatus}}",
+									"description": "(Required) Status values that need to be considered for filter"
+								},
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Invalid status value",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": {
+											"content": "Added as a part of security scheme: oauth2",
+											"type": "text/plain"
+										},
+										"key": "Authorization",
+										"value": "<token>"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/pet/findByStatus?status=available&status=available",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"pet",
+										"findByStatus"
+									],
+									"query": [
+										{
+											"key": "status",
+											"value": "available"
+										},
+										{
+											"key": "status",
+											"value": "available"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "text/plain"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						},
+						{
+							"name": "successful operation",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": {
+											"content": "Added as a part of security scheme: oauth2",
+											"type": "text/plain"
+										},
+										"key": "Authorization",
+										"value": "<token>"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/pet/findByStatus?status=available&status=available",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"pet",
+										"findByStatus"
+									],
+									"query": [
+										{
+											"key": "status",
+											"value": "available"
+										},
+										{
+											"key": "status",
+											"value": "available"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "[\n {\n  \"name\": \"doggie\",\n  \"photoUrls\": [\n   \"<string>\",\n   \"<string>\"\n  ],\n  \"id\": \"<long>\",\n  \"category\": {\n   \"id\": \"<long>\",\n   \"name\": \"<string>\"\n  },\n  \"tags\": [\n   {\n    \"id\": \"<long>\",\n    \"name\": \"<string>\"\n   },\n   {\n    \"id\": \"<long>\",\n    \"name\": \"<string>\"\n   }\n  ],\n  \"status\": \"<string>\"\n },\n {\n  \"name\": \"doggie\",\n  \"photoUrls\": [\n   \"<string>\",\n   \"<string>\"\n  ],\n  \"id\": \"<long>\",\n  \"category\": {\n   \"id\": \"<long>\",\n   \"name\": \"<string>\"\n  },\n  \"tags\": [\n   {\n    \"id\": \"<long>\",\n    \"name\": \"<string>\"\n   },\n   {\n    \"id\": \"<long>\",\n    \"name\": \"<string>\"\n   }\n  ],\n  \"status\": \"<string>\"\n }\n]"
+						}
+					]
+				},
+				{
+					"name": "Test_5_Deletes a pet",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d7f7eb38-5c73-4c1d-8181-e112c7b45058",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 1000ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									"\r",
+									"var jsonData = pm.response.json();\r",
+									"var petId = +pm.iterationData.get(\"petID\");\r",
+									"\r",
+									"console.log(petId);\r",
+									"pm.test(\"Your message = \" + petId, function () {\r",
+									"   \r",
+									"    pm.expect(jsonData.message).to.eql(petId);\r",
+									"});\r",
+									"pm.test(\"Your type = unknown \", function () {\r",
+									"    \r",
+									"    pm.expect(jsonData.type).to.eql(\"unknown\");\r",
+									"});\r",
+									"// возвращаем начальное значение petStatus\r",
+									"//pm.iterationData.set(\"petStatus\",pm.environment.get(\"tempPetStatus\"));\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "oauth2"
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "api_key",
+								"value": "<string>"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/pet/:petId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"pet",
+								":petId"
+							],
+							"variable": [
+								{
+									"description": "(Required) Pet id to delete",
+									"key": "petId",
+									"value": "{{petID}}"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Invalid ID supplied",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"description": {
+											"content": "Added as a part of security scheme: oauth2",
+											"type": "text/plain"
+										},
+										"key": "Authorization",
+										"value": "<token>"
+									},
+									{
+										"key": "api_key",
+										"value": "<string>"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/pet/:petId",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"pet",
+										":petId"
+									],
+									"variable": [
+										{
+											"key": "petId"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "text/plain"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						},
+						{
+							"name": "Pet not found",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"description": {
+											"content": "Added as a part of security scheme: oauth2",
+											"type": "text/plain"
+										},
+										"key": "Authorization",
+										"value": "<token>"
+									},
+									{
+										"key": "api_key",
+										"value": "<string>"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/pet/:petId",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"pet",
+										":petId"
+									],
+									"variable": [
+										{
+											"key": "petId"
+										}
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "text/plain"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Test_6_Find pet by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a0715ac5-d102-4978-bab7-426a7c4f392b",
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 1000ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									"\r",
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"\r",
+									"pm.test(\"Your code = 1\", function () {\r",
+									"    \r",
+									"    pm.expect(jsonData.code).to.eql(1);\r",
+									"});\r",
+									"pm.test(\"Your type = error\", function () {\r",
+									"    \r",
+									"    pm.expect(jsonData.type).to.eql(\"error\");\r",
+									"});\r",
+									"pm.test(\"Your message = Pet not found\", function () {\r",
+									"    \r",
+									"    pm.expect(jsonData.message).to.eql(\"Pet not found\");\r",
+									"});\r",
+									"\r",
+									"pm.iterationData.unset(\"baseUrl\");\r",
+									"pm.iterationData.unset(\"petID\");\r",
+									"pm.iterationData.unset(\"category_Name\");\r",
+									"pm.iterationData.unset(\"petName\");\r",
+									"pm.iterationData.unset(\"tagsName\");\r",
+									"pm.iterationData.unset(\"petStatus\");\r",
+									"pm.iterationData.unset(\"tempPetStatus\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "key",
+									"value": "api_key",
+									"type": "string"
+								},
+								{
+									"key": "value",
+									"value": true,
+									"type": "boolean"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/pet/:petId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"pet",
+								":petId"
+							],
+							"variable": [
+								{
+									"key": "petId",
+									"value": "{{petID}}",
+									"description": "(Required) ID of pet to return"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Invalid ID supplied",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": {
+											"content": "Added as a part of security scheme: apikey",
+											"type": "text/plain"
+										},
+										"key": "api_key",
+										"value": "<API Key>"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/pet/:petId",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"pet",
+										":petId"
+									],
+									"variable": [
+										{
+											"key": "petId"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "text/plain"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						},
+						{
+							"name": "successful operation",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": {
+											"content": "Added as a part of security scheme: apikey",
+											"type": "text/plain"
+										},
+										"key": "api_key",
+										"value": "<API Key>"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/pet/:petId",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"pet",
+										":petId"
+									],
+									"variable": [
+										{
+											"key": "petId"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"name\": \"doggie\",\n \"photoUrls\": [\n  \"<string>\",\n  \"<string>\"\n ],\n \"id\": \"<long>\",\n \"category\": {\n  \"id\": \"<long>\",\n  \"name\": \"<string>\"\n },\n \"tags\": [\n  {\n   \"id\": \"<long>\",\n   \"name\": \"<string>\"\n  },\n  {\n   \"id\": \"<long>\",\n   \"name\": \"<string>\"\n  }\n ],\n \"status\": \"<string>\"\n}"
+						},
+						{
+							"name": "Pet not found",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": {
+											"content": "Added as a part of security scheme: apikey",
+											"type": "text/plain"
+										},
+										"key": "api_key",
+										"value": "<API Key>"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/pet/:petId",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"pet",
+										":petId"
+									],
+									"variable": [
+										{
+											"key": "petId"
+										}
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "text/plain"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

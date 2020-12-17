@@ -1,0 +1,48 @@
+[
+	{
+		"baseUrl":"https://petstore.swagger.io/v2"		,
+		"petID":"1234",
+		"category_Name":"horse",
+		"petName":"Elly",
+		"tagsName":"horse",
+		"petStatus":"available",
+		"tempPetStatus":"non_available"
+	},
+{
+		"baseUrl":"https://petstore.swagger.io/v2"		,
+		"petID":"-1234",
+		"category_Name":"horse",
+		"petName":"Elly",
+		"tagsName":"horse",
+		"petStatus":"available",
+		"tempPetStatus":"non_available"
+	},
+{
+		"baseUrl":"https://petstore.swagger.io/v2"		,
+		"petID":"12345",
+		"category_Name":"Лошадь",
+		"petName":"Elly",
+		"tagsName":"horse",
+		"petStatus":"available",
+		"tempPetStatus":"non_available"
+	},
+{
+		"baseUrl":"https://petstore.swagger.io/v2"		,
+		"petID":"1234",
+		"category_Name":"horse",
+		"petName":"Elly",
+		"tagsName": "Null",
+		"petStatus":"available",
+		"tempPetStatus":"non_available"
+	},
+{
+		"baseUrl":"https://petstore.swagger.io/v2"		,
+		"petID":"1234",
+		"category_Name":"horse",
+		"petName":"Elly",
+		"tagsName":"horse",
+		"petStatus":"готов",
+		"tempPetStatus":"non_available"
+	}
+
+]

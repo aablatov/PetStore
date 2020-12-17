@@ -1,0 +1,6 @@
+baseUrl,petID,category_Name,petName,tagsName,petStatus,tempPetStatus
+https://petstore.swagger.io/v2,1234,horse,Elly,horse,available,non_available
+https://petstore.swagger.io/v2,12345,,Elly,horse,available,non_available
+https://petstore.swagger.io/v2,12346,Лошадь,Elly,horse,available,non_available
+https://petstore.swagger.io/v2,12347,Null,Elly,horse,available,non_available
+https://petstore.swagger.io/v2,123458,horse,Elly,horse,Null,non_пусто
