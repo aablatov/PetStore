@@ -6,7 +6,7 @@
     "test":"tests"
   },
   "scripts": {
-    "api_Petstory_CSV": "newman run tests/Petstory_CSV.json -d tests/data.csv --silent --reporters=cli,htmlextra"
+    "api_Petstory_CSV": "newman run tests/Petstory_CSV.json -d tests/data.csv --silent"
   },
   "author": "home-ak",
   "dependencies": {
